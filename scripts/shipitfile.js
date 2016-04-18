@@ -26,13 +26,5 @@ module.exports = function (shipit) {
     return shipit.remote('cd galarm; echo TASK1 > task1.log; pwd');
   });
  
-  shipit.blTask('local-deploy-clone', function() {
-    return shipit.local('sudo su - nodejs -c "cd /tmp; rm -fr test; git clone https://github.com/norimasuda/test.git"')
-  });
-
-  shipit.task('local-deploy', function() {
-    shipit.start('local-deploy-clone');
-    return shipit.local('sudo su - nodejs -c "cp /tmp/test/main.js /home/nodejs/app/test/main.js"')
-  });
 };
 
