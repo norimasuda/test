@@ -1,0 +1,64 @@
+#!/bin/sh
+
+# chkconfig: 2345 90 90
+# description: nodejs server
+
+. /etc/rc.d/init.d/functions
+
+USER="nodejs"
+
+DAEMON="/usr/local/nodejs/latest/bin/supervisor"
+ROOT_DIR="/home/nodejs/app/galarm"
+
+SERVER="$ROOT_DIR/main.js"
+LOG_FILE="$ROOT_DIR/nodejs.log"
+
+LOCK_FILE="/var/lock/subsys/node-supervisor"
+
+do_start()
+{
+        if [ ! -f "$LOCK_FILE" ] ; then
+                echo -n $"Starting $SERVER: "
+                runuser -l "$USER" -c "$DAEMON $SERVER >> $LOG_FILE &" && echo_success || echo_failure
+                RETVAL=$?
+                echo
+                [ $RETVAL -eq 0 ] && touch $LOCK_FILE
+        else
+                echo "$SERVER is locked."
+                RETVAL=1
+        fi
+}
+do_stop()
+{
+        echo -n $"Stopping $SERVER: "
+        # Note that supervisor spawns node as a child process. Terminate both of them. 
+        pid=`ps -aefw | grep "$DAEMON $SERVER" | grep -v " grep " | awk '{print $2}'`
+        child_pid=`ps -o pid --no-header --ppid $pid`
+        # Kill the supervisor process first
+        kill -9 $pid > /dev/null 2>&1 && echo_success || echo_failure
+        RETVAL=$?
+        [ $RETVAL -ne 0 ] && exit
+        # Kill the node process
+        kill -9 $child_pid > /dev/null 2>&1 && echo_success || echo_failure
+        echo
+        [ $RETVAL -eq 0 ] && rm -f $LOCK_FILE
+}
+
+case "$1" in
+        start)
+                do_start
+                ;;
+        stop)
+                do_stop
+                ;;
+        restart)
+                do_stop
+                do_start
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|restart}"
+                RETVAL=1
+esac
+
+exit $RETVAL
+
