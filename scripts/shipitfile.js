@@ -17,7 +17,7 @@ module.exports = function (shipit) {
     },
     staging_jenkins: {
       servers: 'nodejs@ec2-52-11-19-57.us-west-2.compute.amazonaws.com',
-      key: '/var/lib/jenkins/keys/myaswkeypair3.pem'
+      key: '/var/lib/jenkins/keys/myawskeypair3.pem'
     },
   });
 
