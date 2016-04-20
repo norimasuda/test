@@ -4,16 +4,20 @@ module.exports = function (shipit) {
   shipit.initConfig({
     default: {
       workspace: '/tmp/shipit_workspace',
+      dirToCopy: 'www',
       deployTo: '/home/nodejs/app/test',
       repositoryUrl: 'https://github.com/norimasuda/test.git',
+      branch: 'master',
+      keepReleases: 10,
+      deleteOnRollback: false
     },
     staging: {
       servers: 'nodejs@ec2-52-11-19-57.us-west-2.compute.amazonaws.com',
       key: '/Users/Nori/Keypairs/myawskeypair3.pem'
     },
-    staging-local: {
+    staging_jenkins: {
       servers: 'nodejs@ec2-52-11-19-57.us-west-2.compute.amazonaws.com',
-      key: '/home/nodejs/keys/myaswkeypair3.pem'
+      key: '/var/lib/jenkins/keys/myaswkeypair3.pem'
     },
   });
 
