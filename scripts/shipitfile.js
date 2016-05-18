@@ -22,7 +22,7 @@ module.exports = function (shipit) {
   });
 
   shipit.task('task2', function () {
-    return shipit.remoteCopy ('/tmp/shipit_workspace/www/main.js', '/home/nodejs/app/test/current/www/main.js');
+    return shipit.remoteCopy ('/tmp/shipit_workspace/www/main.js', '/home/nodejs/app/test/current/main.js');
   });
 
   shipit.task('pwd', function () {
