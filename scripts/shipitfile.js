@@ -21,6 +21,10 @@ module.exports = function (shipit) {
     },
   });
 
+  shipit.task('task2', function () {
+    return shipit.remoteCopy ('/tmp/shipit_workspace/www/main.js', '/home/nodejs/app/test/current/www/main.js');
+  });
+
   shipit.task('pwd', function () {
     shipit.start('task1');
     return shipit.remote('cd galarm; echo TEST > test.log; pwd');
